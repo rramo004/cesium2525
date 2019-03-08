@@ -47,14 +47,14 @@ export class CesiumDirective implements OnInit{
 
           let sym = new ms.Symbol(
             this.trackClassArr[i].type,
-            {size: 25,
-            quantity: "200",
-            staffComments: "For Reinforcements",
-            additionalInformation: "Added Support for JJ",
-            direction: (750*360/6400),
-            type: "Machine Gun",
-            dtg: "2912398888111",
-            location: "0900000.0E570306.0N"}
+            {size: 25}
+            // quantity: "200",
+            // staffComments: "For Reinforcements",
+            // additionalInformation: "Added Support for JJ",
+            // direction: (750*360/6400),
+            // type: "Machine Gun",
+            // dtg: "2912398888111",
+            // location: "0900000.0E570306.0N"}
           );
           viewer.entities.add(
             {
