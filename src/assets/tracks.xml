@@ -9,4 +9,9 @@
             <lon>121.9605</lon>
             <lat>22.6978</lat>
       </track>
+      <track>
+            <type>sfgpewrh--mt</type>
+            <lon>122.9605</lon>
+            <lat>24.6978</lat>
+      </track>
 </tracks>
