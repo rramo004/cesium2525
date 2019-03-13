@@ -16,10 +16,19 @@ export class CesiumDirective implements OnInit{
   ngOnInit() {
     const viewer = new Cesium.Viewer(this.el.nativeElement);
     this.tracks = [];
-    this.xmljsonService.getXML('http://localhost:4200/assets/tracks.xml')
-    .subscribe(response => {
-       this.xmljsonService.parseXML(response, this.tracks);
-       this.milsymService.plotTracks(viewer, this.tracks);
-    });
+    
+    this.xmljsonService.get('http://localhost:1337/localhost:8080/tracks')
+    .subscribe (response => {
+          let results = response['content'];
+          this.xmljsonService.parseXML(results, this.tracks);
+          this.milsymService.plotTracks(viewer, this.tracks);   
+      }
+    )
+
+    // this.xmljsonService.getXML('http://localhost:4200/assets/tracks.xml')
+    // .subscribe(response => {
+    //    this.xmljsonService.parseXML(response, this.tracks);
+    //    this.milsymService.plotTracks(viewer, this.tracks);
+    // });
   }
 }

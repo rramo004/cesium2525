@@ -10,8 +10,18 @@
             <lat>22.6978</lat>
       </track>
       <track>
-            <type>sfgpewrh--mt</type>
+            <type>SASPXF------</type>
             <lon>122.9605</lon>
             <lat>24.6978</lat>
+      </track>
+      <track>
+            <type>SASPCLBB----</type>
+            <lon>123.9605</lon>
+            <lat>24.6978</lat>
+      </track>
+      <track>
+            <type>SASPXM------</type>
+            <lon>123.9605</lon>
+            <lat>22.6978</lat>
       </track>
 </tracks>

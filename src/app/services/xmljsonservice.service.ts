@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as parse from 'xml2js';
 import { Track } from '../classes/track'
+import { Observable } from 'rxjs';
+
+import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -9,8 +12,23 @@ import { Track } from '../classes/track'
 })
 export class XmljsonserviceService {
 
+  headerDict = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Access-Control-Allow-Methods': 'GET',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept'
+  }
+
+  requestOptions = {                                                                                                                                                                                 
+    headers: new HttpHeaders(this.headerDict), 
+  };
 
   constructor(private http: HttpClient) {
+  }
+
+  public get(url: string) {
+    return this.http.get(url, this.requestOptions);//, { responseType: 'text' });
   }
 
   public getXML(url: string) {

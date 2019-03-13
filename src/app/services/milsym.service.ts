@@ -13,7 +13,7 @@ export class MilsymService {
     for (let i = 0; i < tracks.length; i++) {
       let sym = new ms.Symbol(
         tracks[i].type,
-        {size: 25}
+        {size: 25, quantity: "Track "+(i+1), infoColor: "#FFFFFF"}
         // quantity: "200",
         // staffComments: "For Reinforcements",
         // additionalInformation: "Added Support for JJ",
