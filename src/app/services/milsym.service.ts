@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewRef } from '@angular/core';
 import { Track } from '../classes/track';
 import * as ms from 'milsymbol';
+import { ViewerService } from './viewer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +14,22 @@ export class MilsymService {
     for (let i = 0; i < tracks.length; i++) {
       let sym = new ms.Symbol(
         tracks[i].type,
-        {size: 25, quantity: "Track "+(i+1), infoColor: "#FFFFFF"}
-        // quantity: "200",
-        // staffComments: "For Reinforcements",
-        // additionalInformation: "Added Support for JJ",
-        // direction: (750*360/6400),
+        {size: 25, 
+         infoColor: "#FFFFFF",
+         outlineWidth: 2,
+        //quantity: tracks[i].id,
+         staffComments: tracks[i].id ,
+         additionalInformation: tracks[i].spd + ' KT',
+         direction: tracks[i].cse,
         // type: "Machine Gun",
-        // dtg: "2912398888111",
-        // location: "0900000.0E570306.0N"}
+        //dtg: tracks[i].dtg,
+        // location: "0900000.0E570306.0N"
+        }
       );
       viewer.entities.add(
         {
+          id: tracks[i].id,
+          name: tracks[i].id,
           position : Cesium.Cartesian3.fromDegrees(tracks[i].lon, tracks[i].lat),
           billboard : {
             image : sym.asCanvas(), //Get the canvas for the billboard
@@ -35,5 +41,16 @@ export class MilsymService {
         }
       )
     }
+  }
+
+  clearTracks(viewer: any, tracks: Track[]) {
+    //viewer.entities.removeAll();
+    if (tracks != null) {
+      for (let track of tracks) {
+        viewer.entities.remove(viewer.entities.getById(track.id))
+      }
+    }
+    
+    
   }
 }

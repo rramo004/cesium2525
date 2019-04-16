@@ -1,0 +1,26 @@
+mat-toolbar {
+    height: 40px;
+}
+
+mat-toolbar-row {
+    height: 40px;
+}
+
+.mat-toolbar-multiple-rows {
+    min-height: 40px;
+}
+
+.span-spacer {
+    margin: 5px;
+}
+
+
+a:link {
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+}

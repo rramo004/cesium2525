@@ -1,0 +1,110 @@
+
+
+<h1 mat-dialog-title>{{description}}</h1>
+<mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  [(ngModel)]="radioChoice">
+  <mat-radio-button class="example-radio-button" *ngFor="let option of radioOptions" [value]="option">
+    {{option}}
+  </mat-radio-button>
+</mat-radio-group>
+
+<div *ngIf="radioChoice=='Ellipse'; else recBlock">
+<div mat-dialog-content [formGroup]="formE">
+  <mat-form-field>
+    <input matInput
+           placeholder="Name"
+           formControlName="name">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="Longitude"
+      formControlName="lon"
+      type="number">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="Latitude"
+      formControlName="lat"
+      type="number">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="MinorAxis"
+      formControlName="minor"
+      type="number">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="MajorAxis"
+      formControlName="major"
+      type="number">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="Height"
+      formControlName="heightE"
+      type="number">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+        <button class="mat-raised-button"(click)="close()">Close</button>
+        <button class="mat-raised-button mat-primary"(click)="saveEllipse()" [disabled]="!isValidEllipse()">Save</button>
+</div>
+</div>
+
+<ng-template #recBlock>
+        <div mat-dialog-content [formGroup]="formR">
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Name"
+                         formControlName="name">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Coordinate1"
+                    formControlName="coord1"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Coordinate2"
+                    formControlName="coord2"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Coordinate3"
+                    formControlName="coord3"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Coordinate4"
+                    formControlName="coord4"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Height"
+                    formControlName="heightR"
+                    type="number">
+                </mat-form-field>
+              </div>
+              <div mat-dialog-actions>
+                      <button class="mat-raised-button"(click)="close()">Close</button>
+                      <button class="mat-raised-button mat-primary"(click)="saveRectangle()" [disabled]="!isValidRectangle()">Save</button>
+              </div>
+</ng-template>
+
+

@@ -1,0 +1,22 @@
+<mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="over">
+      <p>Track Summary</p>
+      <app-ts></app-ts>
+    </mat-drawer>
+  
+    <div class="sidenav-content">
+      <div><button mat-icon-button (click)="drawer.toggle()">
+          <mat-icon class="example-tab-icon">list_alt</mat-icon>
+          Track Summary
+        </button>
+        <span class="span-spacer"></span>
+        <button mat-icon-button (click)="openDialog()">
+            <mat-icon class="example-tab-icon">control_camera</mat-icon>
+            Add Overlay
+          </button>
+      </div>
+      <div class="div-cesium-content" appCesium></div>
+    </div>
+  
+</mat-drawer-container>
+  
