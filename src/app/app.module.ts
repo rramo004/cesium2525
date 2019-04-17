@@ -15,6 +15,7 @@ import { TsComponent } from './components/ts/ts.component';
 import { MilsymService } from './services/milsym.service';
 import { WebsocketService } from './services/websocket.service';
 import { ViewerService } from './services/viewer.service';
+import { TrackmanagerService } from './services/trackmanager.service';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog.component';
@@ -65,7 +66,8 @@ import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog
     XmljsonserviceService,
     MilsymService,
     WebsocketService,
-    ViewerService
+    ViewerService,
+    TrackmanagerService
   ],
   bootstrap: [AppComponent]
 })

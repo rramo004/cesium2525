@@ -5,6 +5,7 @@ import { Track } from '../classes/track'
 import { WebsocketService } from '../services/websocket.service';
 import { Observable } from 'rxjs';
 import { ViewerService } from '../services/viewer.service';
+import { TrackmanagerService } from '../services/trackmanager.service';
 
 
 @Directive({
@@ -12,15 +13,12 @@ import { ViewerService } from '../services/viewer.service';
 })
 export class CesiumDirective implements OnInit{
 
-  tracks: Track[] = [];
-  results: Observable<any>;
-  
-
   constructor(private el: ElementRef, 
               private xmljsonService: XmljsonserviceService, 
               private milsymService: MilsymService, 
               private wsService: WebsocketService,
-              private viewerService: ViewerService) {}
+              private viewerService: ViewerService,
+              private tmService: TrackmanagerService) {}
 
   ngOnInit() {
     if (this.viewerService.viewer == null)
@@ -34,16 +32,16 @@ export class CesiumDirective implements OnInit{
     this.wsService.onNewMessage().subscribe( response => {
       
         if (response != null) {
-          this.milsymService.clearTracks(this.viewerService.viewer, this.tracks);
-          this.tracks = [];
+          this.milsymService.clearTracks(this.viewerService.viewer, this.tmService.getTracks());
+          this.tmService.clearTracks();
           
           //let results = response['content'];
-          this.xmljsonService.parseXML(response, this.tracks);
-          this.milsymService.plotTracks(this.viewerService.viewer, this.tracks); 
+          this.xmljsonService.parseXML(response, this.tmService.getTracks());
+          this.milsymService.plotTracks(this.viewerService.viewer, this.tmService.getTracks()); 
         }
         else {
-          this.milsymService.clearTracks(this.viewerService.viewer, this.tracks);
-          this.tracks = [];
+          this.milsymService.clearTracks(this.viewerService.viewer, this.tmService.getTracks());
+          this.tmService.clearTracks();
         }
       }
     )
