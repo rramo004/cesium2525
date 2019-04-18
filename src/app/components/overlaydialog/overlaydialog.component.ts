@@ -3,7 +3,6 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { Shape } from 'src/app/classes/shape';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
-
 @Component({
   selector: 'app-overlaydialog',
   templateUrl: './overlaydialog.component.html',
@@ -19,6 +18,7 @@ export class OverlaydialogComponent {
   radioOptions: string[] = ['Ellipse', 'Rectangle'];
   name: string;
   type: string;
+  color = 'white';
 
   // Ellipse
   lat: number;
@@ -50,7 +50,8 @@ export class OverlaydialogComponent {
                 lon: [this.lon, [Validators.required]],
                 minor: [this.minor, [Validators.required]],
                 major: [this.major, [Validators.required]],
-                heightE: [this.heightE, [Validators.required]]
+                heightE: [this.heightE, [Validators.required]],
+                color: [this.color, []]
             });
             this.formR = this.fb.group({
                 type: [this.type, []],
@@ -59,7 +60,8 @@ export class OverlaydialogComponent {
                 coord2: [this.coord2, [Validators.required]],
                 coord3: [this.coord3, [Validators.required]],
                 coord4: [this.coord4, [Validators.required]],
-                heightR: [this.heightR, [Validators.required]]
+                heightR: [this.heightR, [Validators.required]],
+                color: [this.color, []]
             });
     }
 
@@ -113,11 +115,13 @@ export class OverlaydialogComponent {
 
     saveEllipse() {
         this.formE.get('type').setValue('Ellipse');
+        this.formE.get('color').setValue(this.color);
         this.dialogRef.close(this.formE.value);
     }
 
     saveRectangle() {
         this.formR.get('type').setValue('Rectangle');
+        this.formE.get('color').setValue(this.color);
         this.dialogRef.close(this.formR.value);
     }
 

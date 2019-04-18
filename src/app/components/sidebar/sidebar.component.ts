@@ -53,7 +53,7 @@ export class SidebarComponent {
           height: data.height,
           fill: false,
           outline : true, // height must be set for outline to display
-          outlineColor: Cesium.Color.WHITE,
+          outlineColor: this.getColor(data.color),
           outlineWidth: 10.0,
 
       }
@@ -68,10 +68,33 @@ export class SidebarComponent {
           height : data.heightR,
           fill: false,
           outline : true, // height must be set for outline to display
-          outlineColor: Cesium.Color.WHITE,
+          outlineColor: this.getColor(data.color),
           outlineWidth: 10.0,
       }
   });
+  }
+
+
+  getColor(colorStr): any {
+    
+    if (colorStr == "blue") {
+      return Cesium.Color.BLUE;
+    }
+    else if (colorStr == "red") {
+      return Cesium.Color.RED;
+    }
+    else if (colorStr == "yellow") {
+      return Cesium.Color.YELLOW;
+    }
+    else if (colorStr == "green") {
+      return Cesium.Color.GREEN;
+    }
+    else if (colorStr == "white") {
+      return Cesium.Color.WHITE;
+    }
+    else {
+      return Cesium.Color.BLACK;
+    }
   }
 
 }

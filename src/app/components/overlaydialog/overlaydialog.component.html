@@ -51,6 +51,16 @@
       formControlName="heightE"
       type="number">
   </mat-form-field>
+  <mat-form-field>
+    <mat-label>Select a Color</mat-label>
+        <mat-select [(value)]="color">
+          <mat-option value="blue">Blue</mat-option>
+          <mat-option value="red">Red</mat-option>
+          <mat-option value="yellow">Yellow</mat-option>
+          <mat-option value="green">Green</mat-option>
+          <mat-option value="white">White</mat-option>
+        </mat-select>
+    </mat-form-field>
 </div>
 <div mat-dialog-actions>
         <button class="mat-raised-button"(click)="close()">Close</button>
@@ -100,6 +110,16 @@
                     formControlName="heightR"
                     type="number">
                 </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Select a Color</mat-label>
+                        <mat-select [(value)]="color">
+                             <mat-option value="blue">Blue</mat-option>
+                             <mat-option value="red">Red</mat-option>
+                             <mat-option value="yellow">Yellow</mat-option>
+                             <mat-option value="green">Green</mat-option>
+                             <mat-option value="white">White</mat-option>
+                         </mat-select>
+                        </mat-form-field>
               </div>
               <div mat-dialog-actions>
                       <button class="mat-raised-button"(click)="close()">Close</button>
