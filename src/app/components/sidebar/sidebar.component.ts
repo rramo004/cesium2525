@@ -47,15 +47,25 @@ export class SidebarComponent {
     let ellipse = this.viewerService.viewer.entities.add({
       position: Cesium.Cartesian3.fromDegrees(data.lon, data.lat),
       name : data.name,
-      ellipse : {
-          semiMinorAxis : data.minor,
-          semiMajorAxis : data.major,
-          height: data.height,
-          fill: false,
-          outline : true, // height must be set for outline to display
-          outlineColor: this.getColor(data.color),
-          outlineWidth: 10.0,
+      // ellipse : {
+      //     semiMinorAxis : data.minor,
+      //     semiMajorAxis : data.major,
+      //     height: data.height,
+      //     fill: false,
+      //     outline : true, // height must be set for outline to display
+      //     outlineColor: this.getColor(data.color),
+      //     outlineWidth: 10.0,
 
+      // }
+
+      cylinder : {
+        length : 300000.0,
+        topRadius : data.minor,
+        bottomRadius : data.major,
+        fill: false,
+        outline : true, // height must be set for outline to display
+        outlineColor: this.getColor(data.color),
+        outlineWidth: 10.0,
       }
     });
   }
@@ -76,7 +86,6 @@ export class SidebarComponent {
 
 
   getColor(colorStr): any {
-    
     if (colorStr == "blue") {
       return Cesium.Color.BLUE;
     }

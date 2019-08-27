@@ -1,9 +1,7 @@
 import { Directive, OnInit, ElementRef, Input} from '@angular/core';
 import { XmljsonserviceService } from '../services/xmljsonservice.service';
 import { MilsymService } from '../services/milsym.service';
-import { Track } from '../classes/track'
 import { WebsocketService } from '../services/websocket.service';
-import { Observable } from 'rxjs';
 import { ViewerService } from '../services/viewer.service';
 import { TrackmanagerService } from '../services/trackmanager.service';
 
@@ -31,16 +29,17 @@ export class CesiumDirective implements OnInit{
 
     this.wsService.onNewMessage().subscribe( response => {
       
+        //console.log(response);
         if (response != null) {
-          this.milsymService.clearTracks(this.viewerService.viewer, this.tmService.getTracks());
+          this.milsymService.clearTracks();
           this.tmService.clearTracks();
           
           //let results = response['content'];
           this.xmljsonService.parseXML(response, this.tmService.getTracks());
-          this.milsymService.plotTracks(this.viewerService.viewer, this.tmService.getTracks()); 
+          this.milsymService.plotTracks(); 
         }
         else {
-          this.milsymService.clearTracks(this.viewerService.viewer, this.tmService.getTracks());
+          this.milsymService.clearTracks();
           this.tmService.clearTracks();
         }
       }
