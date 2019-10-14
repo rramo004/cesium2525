@@ -47,7 +47,7 @@ export class MilsymService {
             //pixelOffset : new Cesium.Cartesian2(-sym.markerAnchor.x, -sym.markerAnchor.y), // Symbol offset
             eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
             horizontalOrigin : Cesium.HorizontalOrigin.LEFT, // default
-            verticalOrigin : Cesium.VerticalOrigin.TOP
+            verticalOrigin : Cesium.VerticalOrigin.TOP,
           },
           label: {
             show: false,

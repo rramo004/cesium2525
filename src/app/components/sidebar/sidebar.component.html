@@ -5,15 +5,20 @@
     </mat-drawer>
   
     <div class="sidenav-content">
-      <div><button mat-icon-button (click)="drawer.toggle()">
-          <mat-icon class="example-tab-icon">list_alt</mat-icon>
-          Track Summary
+      <div><button mat-stroked-button (click)="drawer.toggle()">
+          <mat-icon>dashboard</mat-icon>
+          <span class="span-spacer"></span>Track Summary
         </button>
-        <span class="span-spacer"></span>
-        <button mat-icon-button (click)="openDialog()">
-            <mat-icon class="example-tab-icon">control_camera</mat-icon>
+        <!-- <span class="span-spacer"></span> -->
+        <button mat-stroked-button (click)="openDialog()">
+            <mat-icon>picture_in_picture</mat-icon>
             Add Overlay
           </button>
+        <span class="span-spacer-large"></span>
+        <button mat-stroked-button (click)="openFilterDialog()">
+          <mat-icon class="example-tab-icon">list_alt</mat-icon>
+          Filters
+        </button>
       </div>
       <div class="div-cesium-content" appCesium></div>
     </div>

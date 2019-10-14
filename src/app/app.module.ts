@@ -19,6 +19,8 @@ import { TrackmanagerService } from './services/trackmanager.service';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog.component';
+import { ConditionalsService } from './services/conditionalservice.service';
+import { FilterdialogComponent } from './components/filterdialog/filterdialog.component';
 
 // const appRoutes: Routes = [
 //   { path: '', component: CopComponent },
@@ -34,7 +36,8 @@ import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog
     TsComponent,
     ToolbarComponent,
     OverlaydialogComponent,
-    SidebarComponent
+    SidebarComponent,
+    FilterdialogComponent
     
   ],
   imports: [
@@ -61,14 +64,16 @@ import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog
     MatSelectModule
   ],
   entryComponents: [
-    OverlaydialogComponent
+    OverlaydialogComponent,
+    FilterdialogComponent
   ],
   providers: [
     XmljsonserviceService,
     MilsymService,
     WebsocketService,
     ViewerService,
-    TrackmanagerService
+    TrackmanagerService,
+    ConditionalsService
   ],
   bootstrap: [AppComponent]
 })

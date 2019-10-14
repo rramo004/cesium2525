@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{description}}</h1>
+
+<div mat-dialog-content [formGroup]="filterForm">
+  <br>
+  <mat-form-field>
+      <input matInput
+      placeholder="Speed Filter (KTS)"
+      formControlName="speedFilter"
+      type="number">
+  </mat-form-field>
+  <br>
+</div>
+<div mat-dialog-actions>
+        <button class="mat-raised-button"(click)="close()">Close</button>
+        <button class="mat-raised-button mat-primary"(click)="saveFilters()">Save</button>
+</div>

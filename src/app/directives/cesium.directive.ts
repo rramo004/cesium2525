@@ -4,6 +4,8 @@ import { MilsymService } from '../services/milsym.service';
 import { WebsocketService } from '../services/websocket.service';
 import { ViewerService } from '../services/viewer.service';
 import { TrackmanagerService } from '../services/trackmanager.service';
+import { ConditionalsService } from '../services/conditionalservice.service';
+import { Track } from '../classes/track'
 
 
 @Directive({
@@ -16,11 +18,31 @@ export class CesiumDirective implements OnInit{
               private milsymService: MilsymService, 
               private wsService: WebsocketService,
               private viewerService: ViewerService,
-              private tmService: TrackmanagerService) {}
+              private tmService: TrackmanagerService,
+              private conditionalServer: ConditionalsService) {}
 
   ngOnInit() {
-    if (this.viewerService.viewer == null)
-      this.viewerService.viewer = new Cesium.Viewer(this.el.nativeElement, {timeline: false, fullscreenButton: false, animation: false, sceneMode : Cesium.SceneMode.SCENE2D});
+    if (this.viewerService.viewer == null) {
+      let provider = new Cesium.WebMapServiceImageryProvider({
+        url : 'http://localhost:8080/geoserver/wms',
+        layers: 'NaturalEarth:NE1_50M_SR_W',
+        parameters: {transparent: true, format: 'image/png', tiled: true}
+      });
+
+      this.viewerService.viewer = new Cesium.Viewer(this.el.nativeElement, {
+        baseLayerPicker: false,
+        geocoder : false,
+        timeline: false, 
+        fullscreenButton: false, 
+        animation: false, 
+        sceneMode : Cesium.SceneMode.SCENE2D
+      });
+
+      this.viewerService.viewer.imageryLayers.removeAll();
+      this.viewerService.viewer.imageryLayers.addImageryProvider(provider);
+    }
+
+      
   
     //this.recheckData();
 
@@ -35,7 +57,8 @@ export class CesiumDirective implements OnInit{
           this.tmService.clearTracks();
           
           //let results = response['content'];
-          this.xmljsonService.parseXML(response, this.tmService.getTracks());
+          //this.xmljsonService.parseXML(response, this.tmService.getTracks());
+          this.xmljsonService.parseJSON(response);
           this.milsymService.plotTracks(); 
         }
         else {

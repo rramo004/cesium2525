@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { OverlaydialogComponent } from '../overlaydialog/overlaydialog.component'
+import { FilterdialogComponent } from '../filterdialog/filterdialog.component'
 import { ViewerService } from '../../services/viewer.service';
+import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,8 +12,9 @@ import { ViewerService } from '../../services/viewer.service';
 })
 export class SidebarComponent {
 
-  constructor(public dialog: MatDialog, private viewerService: ViewerService ) { }
-  
+  constructor(public dialog: MatDialog, private viewerService: ViewerService, private filterManagerService: FiltermanagerService) { }
+
+
   openDialog(): void {
     const dialogConfig = new MatDialogConfig();
 
@@ -27,7 +30,7 @@ export class SidebarComponent {
     const dialogRef = this.dialog.open(OverlaydialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
-      console.log("Dialog output:", data);
+      console.log("Overlay Dialog output:", data);
       if (data != null && this.viewerService.viewer != null) {
           if (data.type == 'Ellipse') {
             this.createEllipse(data);
@@ -37,11 +40,33 @@ export class SidebarComponent {
           }
       }
     });
-
-    
-    
   }
 
+  openFilterDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+
+    dialogConfig.data = {
+        id: 1,
+        title: 'Filter Options',
+        filter: {
+          speed: (this.filterManagerService.getSpeed() == null) ? 0 : this.filterManagerService.getSpeed()
+        }
+    }
+    
+    const dialogRef = this.dialog.open(FilterdialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log("Filter Dialog output:", data);
+      if (data != null) {
+        this.filterManagerService.setSpeed(data.speedFilter);
+      }
+        
+    });
+  }
 
   createEllipse(data: any) {
     let ellipse = this.viewerService.viewer.entities.add({

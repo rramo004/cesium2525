@@ -3,8 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as parse from 'xml2js';
 import { Track } from '../classes/track'
 import { interval, throwError  } from 'rxjs';
+import { TrackmanagerService } from './trackmanager.service';
 
 import { catchError, map, timeInterval, switchMap } from 'rxjs/operators';
+import { FiltermanagerService } from './filtermanager.service';
 
 
 @Injectable({
@@ -24,7 +26,9 @@ export class XmljsonserviceService {
     headers: new HttpHeaders(this.headerDict), 
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private tmService: TrackmanagerService,
+    private fmService: FiltermanagerService) {
   }
 
   public get(url: string)  {
@@ -41,6 +45,7 @@ export class XmljsonserviceService {
   }
 
   parseXML(response: string, tracks: Track[]) {
+    this.fmService.setSpeed(20);
     parse.parseString(response, (err, results) => {
       let trkTopTag: any[] = results['tracks'];
       let trks: any[] = trkTopTag['track'];
@@ -60,10 +65,51 @@ export class XmljsonserviceService {
           track.spd = (trk['spd'][index] < 0.0) ? 0.0 : trk['spd'][index];
           track.cse = (trk['cse'][index] < 0.0) ? 0.0 : trk['cse'][index];
           track.dtg = trk['dtg'][index];
+          track.spdCond = false;
+
+          if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+          else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+          else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+          else if (track.thr == "NEU") track.color = "lightgreen";
+          else track.color = "black"; 
+
         }
         tracks.push(track);
       }
     });
+  }
+
+  parseJSON(response: any) {
+    this.fmService.setSpeed(20);
+    let trackJSON: any[] =  JSON.parse(response)['Tracks'];
+    if (trackJSON != undefined) {
+      for (let i = 0; i < trackJSON.length; i++) {
+        let track: Track = new Track();
+        track.id = (trackJSON[i]['id'] == undefined) ? "UNKNOWN" : trackJSON[i]['id'];
+        track.type = trackJSON[i]['type'];
+        track.pos = trackJSON[i]['pos'];
+        track.late = trackJSON[i]['late'];
+        track.cat = trackJSON[i]['cat'];
+        track.thr = trackJSON[i]['thr'];
+        track.lon = trackJSON[i]['lon'];
+        track.lat = trackJSON[i]['lat'];
+        track.spd = (trackJSON[i]['spd'] < 0.0) ? 0.0 : trackJSON[i]['spd'];
+        track.cse = (trackJSON[i]['cse'] < 0.0) ? 0.0 : trackJSON[i]['cse'];
+        track.dtg = trackJSON[i]['dtg'];
+        track.spdCond = false;
+
+        if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+        else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+        else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+        else if (track.thr == "NEU") track.color = "lightgreen";
+        else track.color = "black"; 
+
+
+        this.tmService.pushTrack(track);
+      }
+    }
+    
+      
   }
 
   private handlerErrror(error: Response) {

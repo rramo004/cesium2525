@@ -15,6 +15,10 @@ export class TrackmanagerService {
     return this.tracks;
   }
 
+  pushTrack(track: Track) {
+    this.tracks.push(track);
+  }
+
   clearTracks() {
     this.tracks = [];
   }
