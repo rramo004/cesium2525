@@ -4,7 +4,7 @@ import { Track } from '../../classes/track';
 import { XmljsonserviceService } from '../../services/xmljsonservice.service';
 import { WebsocketService } from '../../services/websocket.service';
 import { TrackmanagerService } from 'src/app/services/trackmanager.service';
-import { preserveWhitespacesDefault } from '@angular/compiler';
+import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 
 @Component({
   selector: 'app-ts',
@@ -19,7 +19,8 @@ export class TsComponent implements OnInit {
   color: String;
   constructor(private xmljsonService: XmljsonserviceService, 
               private wsService: WebsocketService,
-              private tmService: TrackmanagerService) {
+              private tmService: TrackmanagerService,
+              private fmService: FiltermanagerService) {
                 this.getUpdate();
               }
 
@@ -42,7 +43,7 @@ export class TsComponent implements OnInit {
   getUpdate() {
     setInterval(() => {
       this.tracks = this.tmService.getTracks();
-      this.blink();
+      this.checkSpeed();
     }, 500);
   }
 
@@ -50,10 +51,10 @@ export class TsComponent implements OnInit {
       return track.color;
   }
 
-  blink() {
+  checkSpeed() {
     if (this.tracks != null) {
       for (let track of this.tracks) {
-        if (track.spdCond) {
+        if (track.spd >= this.fmService.getSpeed()) {
           if (track.color != "#38404c") {
             track.color = "#38404c";
           } else {
@@ -62,7 +63,12 @@ export class TsComponent implements OnInit {
             else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
             else if (track.thr == "NEU") track.color = "lightgreen";
           }
-          
+        }
+        else {
+          if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+            else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+            else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+            else if (track.thr == "NEU") track.color = "lightgreen";
         }
       }
     }

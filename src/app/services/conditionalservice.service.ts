@@ -20,26 +20,19 @@ export class ConditionalsService {
     setInterval(() => {
       this.tracks = this.tmService.getTracks();
       this.checkSpeed();
-      this.blink();
     }, 500);
   }
 
 
   checkSpeed() {
-    for(let i = 0; i < this.tracks.length; i++) {
-      this.tracks[i].spdCond = (this.tracks[i].spd >= this.fmService.getSpeed()) ? true : false; 
-    }
-  }
-
-  blink() {
-    if (this.tracks != null) {
-      for (let track of this.tracks) {
-        if (track.spdCond) {
-          this.viewerService.viewer.entities.getById(track.id).show = !this.viewerService.viewer.entities.getById(track.id).show
-        }
+    for(let track of this.tracks) {
+      if (track.spd >= this.fmService.getSpeed()) {
+        this.viewerService.viewer.entities.getById(track.id).show = !this.viewerService.viewer.entities.getById(track.id).show;
       }
-     }
-    
+      else {
+        this.viewerService.viewer.entities.getById(track.id).show = true;
+      }
+    }
   }
   
 }
