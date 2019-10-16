@@ -5,7 +5,7 @@ import { WebsocketService } from '../services/websocket.service';
 import { ViewerService } from '../services/viewer.service';
 import { TrackmanagerService } from '../services/trackmanager.service';
 import { ConditionalsService } from '../services/conditionalservice.service';
-import { Track } from '../classes/track'
+import { Track } from '../classes/track';
 
 
 @Directive({
@@ -42,8 +42,7 @@ export class CesiumDirective implements OnInit{
       this.viewerService.viewer.imageryLayers.addImageryProvider(provider);
     }
 
-      
-  
+
     //this.recheckData();
 
     //Socket IO works!

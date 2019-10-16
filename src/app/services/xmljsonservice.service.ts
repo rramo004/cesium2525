@@ -66,6 +66,7 @@ export class XmljsonserviceService {
           track.cse = (trk['cse'][index] < 0.0) ? 0.0 : trk['cse'][index];
           track.dtg = trk['dtg'][index];
 
+          track.spdAck = false;
           if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
           else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
           else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
@@ -96,6 +97,7 @@ export class XmljsonserviceService {
         track.cse = (trackJSON[i]['cse'] < 0.0) ? 0.0 : trackJSON[i]['cse'];
         track.dtg = trackJSON[i]['dtg'];
 
+        track.spdAck = false;
         if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
         else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
         else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";

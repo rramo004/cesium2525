@@ -9,7 +9,6 @@
           <mat-icon>dashboard</mat-icon>
           <span class="span-spacer"></span>Track Summary
         </button>
-        <!-- <span class="span-spacer"></span> -->
         <button mat-stroked-button (click)="openDialog()">
             <mat-icon>picture_in_picture</mat-icon>
             Add Overlay
@@ -22,6 +21,8 @@
       </div>
       <div class="div-cesium-content" appCesium></div>
     </div>
-  
+    <div id="overlay">
+      <button id="button" mat-mini-fab color="primary" (click)="ackAlerts()">ACK</button>
+    </div> 
 </mat-drawer-container>
   

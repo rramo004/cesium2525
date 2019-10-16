@@ -22,10 +22,13 @@
     height: calc(100% - 40px);
   }
 
-  .span-spacer {
-    flex: 1 1 auto;
+  .span-spacer-large {
+    width: 250px;
   }
 
-  .span-spacer-large {
-    flex: 1 1 auto;
+  #button{
+    position: absolute;
+    top: 97%;
+    left: 97%;
+    transform: translate(-50%,-50%);
   }

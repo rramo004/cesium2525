@@ -4,6 +4,7 @@ import { OverlaydialogComponent } from '../overlaydialog/overlaydialog.component
 import { FilterdialogComponent } from '../filterdialog/filterdialog.component'
 import { ViewerService } from '../../services/viewer.service';
 import { FiltermanagerService } from 'src/app/services/filtermanager.service';
+import { TrackmanagerService } from 'src/app/services/trackmanager.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,7 +13,10 @@ import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 })
 export class SidebarComponent {
 
-  constructor(public dialog: MatDialog, private viewerService: ViewerService, private filterManagerService: FiltermanagerService) { }
+  constructor(public dialog: MatDialog, 
+              private viewerService: ViewerService, 
+              private filterManagerService: FiltermanagerService,
+              private tmManagerService: TrackmanagerService) { }
 
 
   openDialog(): void {
@@ -63,9 +67,28 @@ export class SidebarComponent {
       console.log("Filter Dialog output:", data);
       if (data != null) {
         this.filterManagerService.setSpeed(data.speedFilter);
+
+        for (let track of this.tmManagerService.getTracks() ) {
+          if (track.spd >= this.filterManagerService.getSpeed()) {
+            track.spdAck = false;
+          } 
+        }
       }
         
     });
+  }
+
+  ackAlerts() {
+    for (let track of this.tmManagerService.getTracks() ) {
+      if (!track.spdAck) {
+        track.spdAck = true;
+        this.viewerService.viewer.entities.getById(track.id).show = true;
+        if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+        else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+        else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+        else if (track.thr == "NEU") track.color = "lightgreen";
+      }
+    }
   }
 
   createEllipse(data: any) {

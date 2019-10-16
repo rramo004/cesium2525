@@ -11,4 +11,5 @@ export class Track {
     public cse: number;
     public dtg: number;
     public color: string;
+    public spdAck: boolean;
 }

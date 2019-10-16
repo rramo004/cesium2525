@@ -5,7 +5,6 @@ import { XmljsonserviceService } from '../../services/xmljsonservice.service';
 import { WebsocketService } from '../../services/websocket.service';
 import { TrackmanagerService } from 'src/app/services/trackmanager.service';
 import { FiltermanagerService } from 'src/app/services/filtermanager.service';
-
 @Component({
   selector: 'app-ts',
   templateUrl: './ts.component.html',
@@ -44,7 +43,7 @@ export class TsComponent implements OnInit {
     setInterval(() => {
       this.tracks = this.tmService.getTracks();
       this.checkSpeed();
-    }, 500);
+    }, 450);
   }
 
   getColor(track: any) {
@@ -54,21 +53,29 @@ export class TsComponent implements OnInit {
   checkSpeed() {
     if (this.tracks != null) {
       for (let track of this.tracks) {
-        if (track.spd >= this.fmService.getSpeed()) {
-          if (track.color != "#38404c") {
-            track.color = "#38404c";
-          } else {
-            if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
-            else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
-            else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
-            else if (track.thr == "NEU") track.color = "lightgreen";
+        if (track.spd >= this.fmService.getSpeed() ) {
+          if (!track.spdAck) {
+            if (track.color != "#38404c") {
+              track.color = "#38404c";
+            } else {
+              if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+              else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+              else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+              else if (track.thr == "NEU") track.color = "lightgreen";
+            }
           }
+        }
+        else if (track.spdAck) {
+          if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+          else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+          else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+          else if (track.thr == "NEU") track.color = "lightgreen";
         }
         else {
           if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
-            else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
-            else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
-            else if (track.thr == "NEU") track.color = "lightgreen";
+          else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+          else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+          else if (track.thr == "NEU") track.color = "lightgreen";
         }
       }
     }
