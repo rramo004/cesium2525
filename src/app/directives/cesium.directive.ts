@@ -23,14 +23,37 @@ export class CesiumDirective implements OnInit{
 
   ngOnInit() {
     if (this.viewerService.viewer == null) {
-      let provider = new Cesium.WebMapServiceImageryProvider({
-        url : 'http://localhost:8080/geoserver/wms',
-        layers: 'NaturalEarth:NE1_50M_SR_W',
-        parameters: {transparent: true, format: 'image/png', tiled: true}
-      });
+      
+      let providerViewModels = [];
+      let tarrainViewModels = [];
+
+      providerViewModels.push(new Cesium.ProviderViewModel({
+        name: 'Geoserver',
+        iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
+        creationFunction: function() {
+          return new Cesium.WebMapServiceImageryProvider({
+            url : 'http://localhost:8080/geoserver/wms',
+            layers: 'NaturalEarth:NE1_50M_SR_W',
+            parameters: {transparent: true, format: 'image/png', tiled: true}
+          });
+        }
+      }));
+
+      providerViewModels.push(new Cesium.ProviderViewModel({
+        name: 'Bing',
+        iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/bingAerial.png"),
+        creationFunction: function() {
+          return new Cesium.BingMapsImageryProvider({
+            url : 'https://dev.virtualearth.net',
+            key : 'Ak9AXTRd5fXJWPQ3mxanQ4O0LH83H0G2BvMgG0HpYU3IiJ8dBsYiDg8kKmIV8SNy',
+            mapStyle : Cesium.BingMapsStyle.AERIAL
+          });
+        }
+      }));
 
       this.viewerService.viewer = new Cesium.Viewer(this.el.nativeElement, {
-        baseLayerPicker: false,
+        imageryProviderViewModels: providerViewModels,
+        terrainProviderViewModels: tarrainViewModels,
         geocoder : false,
         timeline: false, 
         fullscreenButton: false, 
@@ -38,9 +61,13 @@ export class CesiumDirective implements OnInit{
         sceneMode : Cesium.SceneMode.SCENE2D
       });
 
-      this.viewerService.viewer.imageryLayers.removeAll();
-      this.viewerService.viewer.imageryLayers.addImageryProvider(provider);
+      
+      //this.viewerService.viewer.imageryLayers.addImageryProvider(this.viewerService.provider, 1);
+      //this.viewerService.viewer.imageryLayers.get(0).show = false;
     }
+
+
+
 
 
     //this.recheckData();
