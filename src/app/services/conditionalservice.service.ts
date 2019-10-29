@@ -19,12 +19,12 @@ export class ConditionalsService {
   getUpdate() {
     setInterval(() => {
       this.tracks = this.tmService.getTracks();
-      this.checkSpeed();
+      this.checkCond();
     }, 450);
   }
 
 
-  checkSpeed() {
+  checkCond() {
     for(let track of this.tracks) {
       if (track.spd >= this.fmService.getSpeed() ) {
         if (!track.spdAck) {
@@ -36,7 +36,17 @@ export class ConditionalsService {
           }
         }
       }
-      else if (track.spdAck) {
+      else if (track.alt >= this.fmService.getAlt() ) {
+        if (!track.altAck) {
+          if (this.viewerService.viewer.entities.getById(track.id).show) {
+            this.viewerService.viewer.entities.getById(track.id).show = false;
+          }
+          else {
+            this.viewerService.viewer.entities.getById(track.id).show = true;
+          }
+        }
+      }
+      else if (track.spdAck || track.altAck) {
         this.viewerService.viewer.entities.getById(track.id).show = true;
       }
       else {
@@ -44,5 +54,4 @@ export class ConditionalsService {
       }
     }
   }
-  
 }

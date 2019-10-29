@@ -11,6 +11,7 @@ export class FilterdialogComponent implements OnInit {
   filterForm: FormGroup;
   description: string;
   speedFilter: number;
+  altFilter: number;
  
 
   constructor(
@@ -20,18 +21,24 @@ export class FilterdialogComponent implements OnInit {
 
     this.description = data.title;
     this.speedFilter = data.filter.speed;
+    this.altFilter = data.filter.alt;
 }
 
 
   ngOnInit() {
     this.filterForm = this.fb.group({
-      speedFilter: [this.speedFilter, []]
+      speedFilter: [this.speedFilter, []],
+      altFilter: [this.altFilter, []]
     });
   }
 
   getSpeedFilter() {
-    return this.filterForm.get('speedFilter');
-}
+    return this.filterForm.get('speedFilter');  
+  }
+
+  getAltFilter() {
+    return this.filterForm.get('altFilter');
+  }
 
   close() {
     this.dialogRef.close();

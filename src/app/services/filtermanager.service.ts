@@ -22,4 +22,12 @@ export class FiltermanagerService {
   setSpeed(speed: number) {
     this.filters.speed = speed;
   }
+
+  getAlt(): number {
+    return this.filters.alt;
+  }
+
+  setAlt(alt: number) {
+    this.filters.alt = alt;
+  }
 }

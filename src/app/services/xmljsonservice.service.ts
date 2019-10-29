@@ -46,6 +46,7 @@ export class XmljsonserviceService {
 
   parseXML(response: string, tracks: Track[]) {
     this.fmService.setSpeed(20);
+    this.fmService.setAlt(10000);
     parse.parseString(response, (err, results) => {
       let trkTopTag: any[] = results['tracks'];
       let trks: any[] = trkTopTag['track'];
@@ -73,6 +74,9 @@ export class XmljsonserviceService {
           else if (track.thr == "NEU") track.color = "lightgreen";
           else track.color = "black"; 
 
+          track.alt = 0;
+          track.altAck = false;
+
         }
         tracks.push(track);
       }
@@ -81,6 +85,7 @@ export class XmljsonserviceService {
 
   parseJSON(response: any) {
     this.fmService.setSpeed(20);
+    this.fmService.setAlt(10000);
     let trackJSON: any[] =  JSON.parse(response)['Tracks'];
     if (trackJSON != undefined) {
       for (let i = 0; i < trackJSON.length; i++) {
@@ -102,7 +107,10 @@ export class XmljsonserviceService {
         else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
         else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
         else if (track.thr == "NEU") track.color = "lightgreen";
-        else track.color = "black"; 
+        else track.color = "black";
+
+        track.alt = 0;
+        track.altAck = false;
 
 
         this.tmService.pushTrack(track);

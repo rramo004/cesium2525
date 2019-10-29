@@ -17,8 +17,8 @@ export class CesiumDirective implements OnInit{
               private xmljsonService: XmljsonserviceService, 
               private milsymService: MilsymService, 
               private wsService: WebsocketService,
-              private viewerService: ViewerService,
-              private tmService: TrackmanagerService,
+              public viewerService: ViewerService,
+              public tmService: TrackmanagerService,
               private conditionalServer: ConditionalsService) {}
 
   ngOnInit() {
@@ -62,8 +62,43 @@ export class CesiumDirective implements OnInit{
       });
 
       
-      //this.viewerService.viewer.imageryLayers.addImageryProvider(this.viewerService.provider, 1);
-      //this.viewerService.viewer.imageryLayers.get(0).show = false;
+      let newProvider1 = new Cesium.WebMapServiceImageryProvider({
+        url : 'http://localhost:8080/geoserver/wms',
+        layers: 'topp:states',
+        parameters: {transparent: true, format: 'image/png', tiled: true}
+      });
+
+      let newProvider2 = new Cesium.WebMapServiceImageryProvider({
+        url : 'http://localhost:8080/geoserver/wms',
+        layers: 'tiger:tiger_roads',
+        parameters: {transparent: true, format: 'image/png', tiled: true}
+      });
+
+
+
+      this.viewerService.viewer.imageryLayers.addImageryProvider(newProvider1, 1);
+      this.viewerService.viewer.imageryLayers.addImageryProvider(newProvider2, 2);
+      this.viewerService.viewer.imageryLayers.get(1).show = false;
+
+
+      this.wsService.onNewMessage().subscribe( response => {
+          //console.log(response);
+          if (response != null) {
+            this.milsymService.clearTracks();
+            this.tmService.clearTracks();
+            
+            //let results = response['content'];
+            //this.xmljsonService.parseXML(response, this.tmService.getTracks());
+            this.xmljsonService.parseJSON(response);
+            this.milsymService.plotTracks(); 
+          }
+          else {
+            this.milsymService.clearTracks();
+            this.tmService.clearTracks();
+          }
+        }
+      )
+
     }
 
 
@@ -75,24 +110,7 @@ export class CesiumDirective implements OnInit{
     //Socket IO works!
     //this.wsService.sendMessage();
 
-    this.wsService.onNewMessage().subscribe( response => {
-      
-        //console.log(response);
-        if (response != null) {
-          this.milsymService.clearTracks();
-          this.tmService.clearTracks();
-          
-          //let results = response['content'];
-          //this.xmljsonService.parseXML(response, this.tmService.getTracks());
-          this.xmljsonService.parseJSON(response);
-          this.milsymService.plotTracks(); 
-        }
-        else {
-          this.milsymService.clearTracks();
-          this.tmService.clearTracks();
-        }
-      }
-    )
+    
 
     // if (this.viewerService.viewer != null) {
     //   let greenCircle = this.viewerService.viewer.entities.add({

@@ -60,42 +60,22 @@ export class MilsymService {
         }
       )
 
-      // symbol.manualUpdate = true;
-      // symbol.forceUpdate = true;
-
-
-      // let tooltip = viewer.entities.add(
-      //   {
-      //     id: 'tooltip' + tracks[i].id,
-      //     label : { 
-      //         show: false,
-      //         showBackground : true,
-      //         font : '16px monospace',
-      //         horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
-      //         verticalOrigin : Cesium.VerticalOrigin.TOP,
-      //         pixelOffset : new Cesium.Cartesian2(15, 0),
-              
-      //     }
-      //   }
-      // )
-
-      // new Cesium.ScreenSpaceEventHandler(this.viewerService.viewer.scene.canvas)
-      // .setInputAction(function(movement) {
-      //   let pickedObject = this.viewerService.viewer.scene.pick(movement.endPosition);
-      //   if (Cesium.defined(pickedObject) && (pickedObject.id === symbol)) {
-      //     let lat: string = (this.tmService.tracks[i].lat).toString();
-      //     let lon: string = (this.tmService.tracks[i].lon).toString();
-      //     symbol.label.show =  true,
-      //     symbol.label.text = 
-      //         'Track Id: ' + this.tmService.tracks[i].id +
-      //         '\nLat: ' + lat.slice(0,5) + '\u00B0' +
-      //         '\nLon: ' + lon.slice(0,6) + '\u00B0'
-      //   }
-      //   else {
-      //     symbol.label.show = false;
-      //   }
-       
-      // }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+      let handler = new Cesium.ScreenSpaceEventHandler(this.viewerService.viewer.scene.canvas)
+      handler.setInputAction((movement) => {
+        let picked = this.viewerService.viewer.scene.pick(movement.endPosition);
+        if ((Cesium.defined(picked)) && (picked.id === symbol)) {
+          let lat: string = (this.tmService.tracks[i].lat).toString();
+          let lon: string = (this.tmService.tracks[i].lon).toString();
+          symbol.label.show =  true,
+          symbol.label.text = 
+              'Track Id: ' + this.tmService.tracks[i].id +
+              '\nLat: ' + lat.slice(0,5) + '\u00B0' +
+              '\nLon: ' + lon.slice(0,6) + '\u00B0'
+        }
+        else {
+          symbol.label.show = false;
+        }
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
   }
 

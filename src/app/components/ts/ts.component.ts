@@ -16,27 +16,12 @@ export class TsComponent implements OnInit {
   tracks: Track[];
   displayedColumns: string[] = ['id', 'pos', 'late', 'cat', 'thr', 'spd', 'cse'];
   color: String;
-  constructor(private xmljsonService: XmljsonserviceService, 
-              private wsService: WebsocketService,
-              private tmService: TrackmanagerService,
+  constructor(private tmService: TrackmanagerService,
               private fmService: FiltermanagerService) {
                 this.getUpdate();
               }
 
   ngOnInit() {
-    
-    // this.wsService.onNewMessage().subscribe( response => {
-    //     if (response != null) {          
-    //       this.tracks = [];
-    //       this.xmljsonService.parseXML(response, this.tracks);
-    //       this.show = true;
-    //     }
-    //     else {
-    //      this.tracks = [];
-    //      this.show = false;
-    //     }
-    //   }
-    // )
   }
 
   getUpdate() {
@@ -65,7 +50,19 @@ export class TsComponent implements OnInit {
             }
           }
         }
-        else if (track.spdAck) {
+        else if (track.alt >= this.fmService.getAlt() ) {
+          if (!track.altAck) {
+            if (track.color != "#38404c") {
+              track.color = "#38404c";
+            } else {
+              if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+              else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+              else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+              else if (track.thr == "NEU") track.color = "lightgreen";
+            }
+          }
+        }
+        else if (track.spdAck || track.altAck) {
           if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
           else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
           else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";

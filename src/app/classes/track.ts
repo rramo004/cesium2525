@@ -12,4 +12,6 @@ export class Track {
     public dtg: number;
     public color: string;
     public spdAck: boolean;
+    public alt: number;
+    public altAck: boolean;
 }

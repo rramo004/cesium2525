@@ -57,21 +57,26 @@ export class SidebarComponent {
         id: 1,
         title: 'Filter Options',
         filter: {
-          speed: (this.filterManagerService.getSpeed() == null) ? 0 : this.filterManagerService.getSpeed()
+          speed: (this.filterManagerService.getSpeed() == null) ? 0 : this.filterManagerService.getSpeed(),
+          alt: (this.filterManagerService.getAlt() == null) ? 0 : this.filterManagerService.getAlt()
         }
     }
     
     const dialogRef = this.dialog.open(FilterdialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
-      console.log("Filter Dialog output:", data);
       if (data != null) {
         this.filterManagerService.setSpeed(data.speedFilter);
+        this.filterManagerService.setAlt(data.altFilter);
 
         for (let track of this.tmManagerService.getTracks() ) {
           if (track.spd >= this.filterManagerService.getSpeed()) {
             track.spdAck = false;
-          } 
+          }
+
+          if (track.alt >= this.filterManagerService.getAlt()) {
+            track.altAck = false;
+          }
         }
       }
         
@@ -82,6 +87,14 @@ export class SidebarComponent {
     for (let track of this.tmManagerService.getTracks() ) {
       if (!track.spdAck) {
         track.spdAck = true;
+        this.viewerService.viewer.entities.getById(track.id).show = true;
+        if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
+        else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
+        else if (track.thr == "UNK" || track.thr == "PND") track.color = "yellow";
+        else if (track.thr == "NEU") track.color = "lightgreen";
+      }
+      else if (!track.altAck) {
+        track.altAck = true;
         this.viewerService.viewer.entities.getById(track.id).show = true;
         if (track.thr == "HOS" || track.thr == "SUS") track.color = "red";
         else if (track.thr == "FRD" || track.thr == "AFD") track.color = "lightblue";
