@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{description}}</h1>
+
+<div *ngFor="let layer of layers; let i = index;">
+    <mat-checkbox class="example-margin" [(ngModel)]="layers[i].checked">{{layer.name}}</mat-checkbox>
+    <!-- <input type="checkbox" name="layer{{layer.id}}" [(ngModel)]="layers[i].checked">
+    <label for="layer{{layer.id}}">{{layer.name}}</label> -->
+  </div>
+
+<div mat-dialog-actions>
+        <button class="mat-raised-button"(click)="close()">Close</button>
+</div>

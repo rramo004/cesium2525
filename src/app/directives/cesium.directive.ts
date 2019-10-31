@@ -78,7 +78,9 @@ export class CesiumDirective implements OnInit{
 
       this.viewerService.viewer.imageryLayers.addImageryProvider(newProvider1, 1);
       this.viewerService.viewer.imageryLayers.addImageryProvider(newProvider2, 2);
-      this.viewerService.viewer.imageryLayers.get(1).show = false;
+      for (let i = 1; i < this.viewerService.viewer.imageryLayers.length; i++ ) {
+        this.viewerService.viewer.imageryLayers.get(i).show = false;
+      }
 
 
       this.wsService.onNewMessage().subscribe( response => {

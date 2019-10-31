@@ -5,6 +5,7 @@ import { FilterdialogComponent } from '../filterdialog/filterdialog.component'
 import { ViewerService } from '../../services/viewer.service';
 import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 import { TrackmanagerService } from 'src/app/services/trackmanager.service';
+import { LayerdialogComponent } from '../layerdialog/layerdialog.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -81,6 +82,23 @@ export class SidebarComponent {
       }
         
     });
+  }
+
+  openLayerDialog() : void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+
+    dialogConfig.data = {
+        id: 1,
+        title: 'Layer Options'
+    }
+    
+    const dialogRef = this.dialog.open(LayerdialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(data => {});
   }
 
   ackAlerts() {
