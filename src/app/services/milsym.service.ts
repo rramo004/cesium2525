@@ -35,7 +35,9 @@ export class MilsymService {
       let desc: string =  
           'Track Id: ' + this.tmService.tracks[i].id +
           '<br>Lat: ' + lat.slice(0,5) + '\u00B0' +
-          '<br>Lon: ' + lon.slice(0,6) + '\u00B0'
+          '<br>Lon: ' + lon.slice(0,6) + '\u00B0' +
+          '<br>Course: ' + this.tmService.tracks[i].cse  + '\u00B0' +
+          '<br>Speed: ' + this.tmService.tracks[i].spd + 'KT';
       let symbol = this.viewerService.viewer.entities.add(
         {
           id: this.tmService.tracks[i].id,

@@ -13,9 +13,10 @@ export class OverlaydialogComponent {
 
   formE: FormGroup;
   formR: FormGroup;
+  formC: FormGroup;
   description:string;
   radioChoice: string = 'Ellipse';
-  radioOptions: string[] = ['Ellipse', 'Rectangle'];
+  radioOptions: string[] = ['Ellipse', 'Rectangle', 'Corridor'];
   name: string;
   type: string;
   color = 'white';
@@ -33,6 +34,13 @@ export class OverlaydialogComponent {
   coord3: number;
   coord4: number;
   heightR: number;
+
+  // Corridor
+  startLat: number;
+  startLon: number;
+  endLat: number;
+  endLon: number;
+  heightC: number;
 
     constructor(
         private fb: FormBuilder,
@@ -63,13 +71,26 @@ export class OverlaydialogComponent {
                 heightR: [this.heightR, [Validators.required]],
                 color: [this.color, []]
             });
+            this.formC = this.fb.group({
+                type: [this.type, []],
+                name: [this.name, [Validators.required]],
+                startLat: [this.startLat, [Validators.required]],
+                startLon: [this.startLon, [Validators.required]],
+                endLat: [this.endLat, [Validators.required]],
+                endLon: [this.endLon, [Validators.required]],
+                heightC: [this.heightC, [Validators.required]],
+                color: [this.color, []]
+            });
     }
 
     getName() {
         if (this.radioChoice == 'Ellipse')
             return this.formE.get('name');
-        else {
+        else if (this.radioChoice == 'Rectangle') {
             return this.formR.get('name');
+        }
+        else if (this.radioChoice == 'Corridor') {
+            return this.formC.get('name');
         }
     }
 
@@ -113,6 +134,26 @@ export class OverlaydialogComponent {
         return this.formR.get('heightR');
     }
 
+    getStartLat() {
+        return this.formC.get('startLat');
+    }
+
+    getStartLon() {
+        return this.formC.get('startLon');
+    }
+
+    getEndLat() {
+        return this.formC.get('endLat');
+    }
+
+    getEndLon() {
+        return this.formC.get('endLon');
+    }
+
+    getHeightC() {
+        return this.formC.get('heightC');
+    }
+
     saveEllipse() {
         this.formE.get('type').setValue('Ellipse');
         this.formE.get('color').setValue(this.color);
@@ -121,8 +162,14 @@ export class OverlaydialogComponent {
 
     saveRectangle() {
         this.formR.get('type').setValue('Rectangle');
-        this.formE.get('color').setValue(this.color);
+        this.formR.get('color').setValue(this.color);
         this.dialogRef.close(this.formR.value);
+    }
+
+    saveCorridor() {
+        this.formC.get('type').setValue('Corridor');
+        this.formC.get('color').setValue(this.color);
+        this.dialogRef.close(this.formC.value);
     }
 
     close() {
@@ -183,6 +230,36 @@ export class OverlaydialogComponent {
         }
         else if ((this.getHeightR().dirty || this.getHeightR().touched) && this.getHeightR().invalid) {
             if (this.getHeightR().errors.required) 
+                isValid = isValid && false;
+        }
+
+        return isValid;
+    }
+
+    isValidCorridor(): boolean {
+        let isValid = true;
+        if ((this.getName().dirty || this.getName().touched) && this.getName().invalid) {
+            if (this.getName().errors.required) 
+              isValid = isValid && false;
+        }
+        else if ((this.getStartLat().dirty || this.getStartLat().touched) && this.getStartLat().invalid) {
+            if (this.getStartLat().errors.required)
+                isValid = isValid && false;
+        }
+        else if ((this.getStartLon().dirty || this.getStartLon().touched) && this.getStartLon().invalid) {
+            if (this.getStartLon().errors.required) 
+                isValid = isValid && false;
+        }
+        else if ((this.getEndLat().dirty || this.getEndLat().touched) && this.getEndLat().invalid) {
+            if (this.getEndLat().errors.required) 
+                isValid = isValid && false;
+        }
+        else if ((this.getEndLon().dirty || this.getEndLon().touched) && this.getEndLon().invalid) {
+            if (this.getEndLon().errors.required) 
+                isValid = isValid && false;
+        }
+        else if ((this.getHeightC().dirty || this.getHeightC().touched) && this.getHeightC().invalid) {
+            if (this.getHeightC().errors.required) 
                 isValid = isValid && false;
         }
 

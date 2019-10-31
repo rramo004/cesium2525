@@ -40,8 +40,11 @@ export class SidebarComponent {
           if (data.type == 'Ellipse') {
             this.createEllipse(data);
           }
-          else {
+          else if(data.type == 'Rectangle') {
             this.createRectangle(data);
+          }
+          else if (data.type == 'Corridor') {
+            this.createCorridor(data);
           }
       }
     });
@@ -160,7 +163,27 @@ export class SidebarComponent {
           outlineColor: this.getColor(data.color),
           outlineWidth: 10.0,
       }
-  });
+    });
+  }
+
+  computeCircle(radius) {
+    let positions = [];
+    for (var i = 0; i < 360; i++) {
+        var radians = Cesium.Math.toRadians(i);
+        positions.push(new Cesium.Cartesian2(radius * Math.cos(radians), radius * Math.sin(radians)));
+    }
+    return positions;
+  } 
+
+  createCorridor(data: any) {
+    let corridor = this.viewerService.viewer.entities.add({
+      polylineVolume : {
+          positions : Cesium.Cartesian3.fromDegreesArray([data.startLon, data.startLat,
+                                                          data.endLon, data.endLat]),
+          shape : this.computeCircle(250.0),
+          material : this.getColor(data.color)
+      }
+    });
   }
 
 

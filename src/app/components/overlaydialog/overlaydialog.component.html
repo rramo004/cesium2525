@@ -9,7 +9,7 @@
   </mat-radio-button>
 </mat-radio-group>
 
-<div *ngIf="radioChoice=='Ellipse'; else recBlock">
+<div *ngIf="radioChoice=='Ellipse'">
 <div mat-dialog-content [formGroup]="formE">
   <mat-form-field>
     <input matInput
@@ -68,7 +68,7 @@
 </div>
 </div>
 
-<ng-template #recBlock>
+<div *ngIf="radioChoice=='Rectangle'">
         <div mat-dialog-content [formGroup]="formR">
                 <mat-form-field>
                   <input matInput
@@ -125,6 +125,66 @@
                       <button class="mat-raised-button"(click)="close()">Close</button>
                       <button class="mat-raised-button mat-primary"(click)="saveRectangle()" [disabled]="!isValidRectangle()">Save</button>
               </div>
-</ng-template>
+</div>
+
+
+<div *ngIf="radioChoice=='Corridor'">
+        <div mat-dialog-content [formGroup]="formC">
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Name"
+                         formControlName="name">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Start Latitude"
+                    formControlName="startLat"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Start Longitude"
+                    formControlName="startLon"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="End Latitude"
+                    formControlName="endLat"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="End Longitude"
+                    formControlName="endLon"
+                    type="number">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input matInput
+                    placeholder="Height"
+                    formControlName="heightC"
+                    type="number">
+                </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Select a Color</mat-label>
+                        <mat-select [(value)]="color">
+                             <mat-option value="blue">Blue</mat-option>
+                             <mat-option value="red">Red</mat-option>
+                             <mat-option value="yellow">Yellow</mat-option>
+                             <mat-option value="green">Green</mat-option>
+                             <mat-option value="white">White</mat-option>
+                         </mat-select>
+                        </mat-form-field>
+              </div>
+              <div mat-dialog-actions>
+                      <button class="mat-raised-button"(click)="close()">Close</button>
+                      <button class="mat-raised-button mat-primary"(click)="saveCorridor()" [disabled]="!isValidCorridor()">Save</button>
+              </div>
+</div>
 
 
