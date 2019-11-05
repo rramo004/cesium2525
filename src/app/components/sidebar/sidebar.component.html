@@ -1,13 +1,19 @@
 <mat-drawer-container class="container" autosize>
     <mat-drawer #drawer class="sidenav" mode="side">
-      <p>Track Summary</p>
+      <p>Track Summary ({{trackCount}})</p>
       <app-ts></app-ts>
     </mat-drawer>
   
     <div class="sidenav-content">
-      <div><button mat-stroked-button (click)="drawer.toggle()">
+      <div>
+        <button mat-stroked-button>
+          <mat-icon [ngStyle]="{'color' : 'green'}" *ngIf="connected">check_circle</mat-icon>
+          <mat-icon [ngStyle]="{'color' : 'red'}"*ngIf="!connected">check_circle</mat-icon> 
+          <span style="color : green" class="span-spacer"></span>ICS
+        </button>
+        <button mat-stroked-button (click)="drawer.toggle()">
           <mat-icon>dashboard</mat-icon>
-          <span class="span-spacer"></span>Track Summary
+          <span class="span-spacer"></span>Track Summary ({{trackCount}})
         </button>
         <button mat-stroked-button (click)="openDialog()">
             <mat-icon>picture_in_picture</mat-icon>
@@ -19,7 +25,8 @@
           Filters
         </button>
         <button mat-stroked-button (click)="openLayerDialog()">
-          <mat-icon class="example-tab-icon">layers</mat-icon>
+          <mat-icon [ngStyle]="{'color' : '#72bcd4'}" *ngIf="layerEnabled">layers</mat-icon>
+          <mat-icon *ngIf="!layerEnabled" class="example-tab-icon">layers</mat-icon>
           Layers
         </button>
       </div>

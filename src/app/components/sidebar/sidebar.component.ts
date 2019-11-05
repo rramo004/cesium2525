@@ -6,6 +6,7 @@ import { ViewerService } from '../../services/viewer.service';
 import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 import { TrackmanagerService } from 'src/app/services/trackmanager.service';
 import { LayerdialogComponent } from '../layerdialog/layerdialog.component';
+import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,10 +15,23 @@ import { LayerdialogComponent } from '../layerdialog/layerdialog.component';
 })
 export class SidebarComponent {
 
+  trackCount: number = 0;
+  connected: boolean = false;
+  layerEnabled: boolean = false;
+
   constructor(public dialog: MatDialog, 
               private viewerService: ViewerService, 
               private filterManagerService: FiltermanagerService,
-              private tmManagerService: TrackmanagerService) { }
+              private wsService: WebsocketService,
+              private tmManagerService: TrackmanagerService) { this.updateTrack() }
+
+
+  updateTrack(): void {
+    setInterval(() => {
+      this.trackCount = this.tmManagerService.tracks.length;
+      this.connected = this.wsService.connected;
+    }, 1000);
+  }
 
 
   openDialog(): void {
@@ -101,7 +115,12 @@ export class SidebarComponent {
     
     const dialogRef = this.dialog.open(LayerdialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(data => {});
+    dialogRef.afterClosed().subscribe(data => {
+      this.layerEnabled = false;
+      for (let i = 1; i < this.viewerService.viewer.imageryLayers.length; i++ ) {
+          this.layerEnabled = this.layerEnabled || this.viewerService.viewer.imageryLayers.get(i).show;
+      }
+    });
   }
 
   ackAlerts() {

@@ -7,12 +7,19 @@ import { Observable } from 'rxjs';
 })
 export class WebsocketService {
   private socket;
+  _connected: boolean = false;
 
   constructor() {
     this.socket = io(this.getURL());
-    this.socket.on('connection', message =>
+    this.socket.on('connect', message =>
     {
       console.log("Connected to the Server!");
+      this._connected = true;
+    });
+    this.socket.on('disconnect', message => 
+    {
+      console.log("Disconnected from the Server!");
+      this._connected = false;
     });
   }
 
@@ -32,6 +39,10 @@ export class WebsocketService {
 
   getURL(): string {
     return 'http://localhost:4567';
+  }
+
+  get connected() {
+    return this._connected;
   }
 
   close() {
