@@ -7,6 +7,8 @@ import { FiltermanagerService } from 'src/app/services/filtermanager.service';
 import { TrackmanagerService } from 'src/app/services/trackmanager.service';
 import { LayerdialogComponent } from '../layerdialog/layerdialog.component';
 import { WebsocketService } from 'src/app/services/websocket.service';
+import { OverlaymanagerService } from 'src/app/services/overlaymanager.service';
+import { Shape } from 'src/app/classes/shape';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,12 +20,14 @@ export class SidebarComponent {
   trackCount: number = 0;
   connected: boolean = false;
   layerEnabled: boolean = false;
+  filterEnabled: boolean = false;
 
   constructor(public dialog: MatDialog, 
               private viewerService: ViewerService, 
               private filterManagerService: FiltermanagerService,
               private wsService: WebsocketService,
-              private tmManagerService: TrackmanagerService) { this.updateTrack() }
+              private tmManagerService: TrackmanagerService,
+              private olManagerServer: OverlaymanagerService) { this.updateTrack() }
 
 
   updateTrack(): void {
@@ -49,7 +53,7 @@ export class SidebarComponent {
     const dialogRef = this.dialog.open(OverlaydialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
-      console.log("Overlay Dialog output:", data);
+      // console.log("Overlay Dialog output:", data);
       if (data != null && this.viewerService.viewer != null) {
           if (data.type == 'Ellipse') {
             this.createEllipse(data);
@@ -76,13 +80,15 @@ export class SidebarComponent {
         title: 'Filter Options',
         filter: {
           speed: (this.filterManagerService.getSpeed() == null) ? 0 : this.filterManagerService.getSpeed(),
-          alt: (this.filterManagerService.getAlt() == null) ? 0 : this.filterManagerService.getAlt()
+          alt: (this.filterManagerService.getAlt() == null) ? 0 : this.filterManagerService.getAlt(),
+          ol: this.olManagerServer.overlays
         }
     }
     
     const dialogRef = this.dialog.open(FilterdialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
+      this.filterEnabled = false;
       if (data != null) {
         this.filterManagerService.setSpeed(data.speedFilter);
         this.filterManagerService.setAlt(data.altFilter);
@@ -96,6 +102,9 @@ export class SidebarComponent {
             track.altAck = false;
           }
         }
+        
+        this.olManagerServer.updateOverlays(data.olFilters);
+        this.checkOverlayFilter();
       }
         
     });
@@ -144,10 +153,40 @@ export class SidebarComponent {
     }
   }
 
+  checkOverlayFilter() {
+    for (let track of this.tmManagerService.tracks) {
+      this.viewerService.viewer.entities.getById(track.id).show = true;
+    }
+
+    for (let olFilter of this.olManagerServer.overlays) {
+      this.filterEnabled = this.filterEnabled || olFilter.checked;
+      if (this.filterEnabled) {
+        if (olFilter.checked) {
+          let ellipseCenter = this.viewerService.viewer.entities.getById(olFilter.id).position.getValue(this.viewerService.viewer.clock.currentTime);
+          for (let track of this.tmManagerService.tracks) {
+            let trackPosValue = this.viewerService.viewer.entities.getById(track.id).position.getValue(this.viewerService.viewer.clock.currentTime);
+            let distance = Cesium.Cartesian3.distance(ellipseCenter, trackPosValue);
+            if (distance > olFilter.radius) {
+              this.viewerService.viewer.entities.getById(track.id).show = false;
+            }
+          }
+        }
+      }
+      else {
+        for (let track of this.tmManagerService.tracks) {
+          this.viewerService.viewer.entities.getById(track.id).show = true;
+        }
+      }     
+    }
+  }
+
   createEllipse(data: any) {
+    let ellipseCenter = Cesium.Cartesian3.fromDegrees(data.lon, data.lat);
+
     let ellipse = this.viewerService.viewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(data.lon, data.lat),
+      position: ellipseCenter,
       name : data.name,
+      id: data.name,
       // ellipse : {
       //     semiMinorAxis : data.minor,
       //     semiMajorAxis : data.major,
@@ -169,6 +208,13 @@ export class SidebarComponent {
         outlineWidth: 10.0,
       }
     });
+
+    let overlay: Shape = new Shape();
+    overlay.id = data.name;
+    overlay.name = data.name;
+    overlay.checked = false;
+    overlay.radius = data.major;
+    this.olManagerServer.pushOverlay(overlay);
   }
 
   createRectangle(data: any) {
@@ -183,6 +229,12 @@ export class SidebarComponent {
           outlineWidth: 10.0,
       }
     });
+
+    let overlay: Shape = new Shape();
+    overlay.id = data.name;
+    overlay.name = data.name;
+    overlay.checked = false;
+    this.olManagerServer.pushOverlay(overlay);
   }
 
   computeCircle(radius) {
@@ -203,6 +255,12 @@ export class SidebarComponent {
           material : this.getColor(data.color)
       }
     });
+
+    let overlay: Shape = new Shape();
+    overlay.id = data.name;
+    overlay.name = data.name;
+    overlay.checked = false;
+    this.olManagerServer.pushOverlay(overlay);
   }
 
 

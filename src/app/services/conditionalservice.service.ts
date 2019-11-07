@@ -19,7 +19,7 @@ export class ConditionalsService {
   getUpdate() {
     setInterval(() => {
       this.tracks = this.tmService.getTracks();
-      this.checkCond();
+      //this.checkCond();
     }, 450);
   }
 

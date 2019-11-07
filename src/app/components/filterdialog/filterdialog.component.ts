@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Shape } from '../../classes/shape'
 
 @Component({
   selector: 'app-filterdialog',
@@ -12,6 +13,7 @@ export class FilterdialogComponent implements OnInit {
   description: string;
   speedFilter: number;
   altFilter: number;
+  olFilters: Shape[];
  
 
   constructor(
@@ -22,13 +24,15 @@ export class FilterdialogComponent implements OnInit {
     this.description = data.title;
     this.speedFilter = data.filter.speed;
     this.altFilter = data.filter.alt;
+    this.olFilters = data.filter.ol;
 }
 
 
   ngOnInit() {
     this.filterForm = this.fb.group({
       speedFilter: [this.speedFilter, []],
-      altFilter: [this.altFilter, []]
+      altFilter: [this.altFilter, []],
+      olFilters: [this.olFilters, []]
     });
   }
 

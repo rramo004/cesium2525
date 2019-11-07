@@ -22,6 +22,7 @@ import { OverlaydialogComponent } from './components/overlaydialog/overlaydialog
 import { ConditionalsService } from './services/conditionalservice.service';
 import { FilterdialogComponent } from './components/filterdialog/filterdialog.component';
 import { LayerdialogComponent } from './components/layerdialog/layerdialog.component';
+import { OverlaymanagerService } from './services/overlaymanager.service'
 
 // const appRoutes: Routes = [
 //   { path: '', component: CopComponent },
@@ -77,7 +78,8 @@ import { LayerdialogComponent } from './components/layerdialog/layerdialog.compo
     WebsocketService,
     ViewerService,
     TrackmanagerService,
-    ConditionalsService
+    ConditionalsService,
+    OverlaymanagerService
   ],
   bootstrap: [AppComponent]
 })

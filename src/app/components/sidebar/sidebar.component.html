@@ -21,7 +21,8 @@
           </button>
         <span class="span-spacer-large"></span>
         <button mat-stroked-button (click)="openFilterDialog()">
-          <mat-icon class="example-tab-icon">list_alt</mat-icon>
+          <mat-icon [ngStyle]="{'color' : '#72bcd4'}" *ngIf="filterEnabled">list_alt</mat-icon>
+          <mat-icon *ngIf="!filterEnabled" class="example-tab-icon">list_alt</mat-icon>
           Filters
         </button>
         <button mat-stroked-button (click)="openLayerDialog()">

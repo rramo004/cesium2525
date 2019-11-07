@@ -24,8 +24,8 @@ export class OverlaydialogComponent {
   // Ellipse
   lat: number;
   lon: number;
-  minor: number = 300000.0;
-  major: number = 300000.0;
+  minor: number = 15000.0;
+  major: number = 15000.0;
   heightE: number;
 
   // Rectangle
