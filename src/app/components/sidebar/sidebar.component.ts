@@ -9,6 +9,7 @@ import { LayerdialogComponent } from '../layerdialog/layerdialog.component';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { OverlaymanagerService } from 'src/app/services/overlaymanager.service';
 import { Shape } from 'src/app/classes/shape';
+import { MilsymService } from 'src/app/services/milsym.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,13 +28,15 @@ export class SidebarComponent {
               private filterManagerService: FiltermanagerService,
               private wsService: WebsocketService,
               private tmManagerService: TrackmanagerService,
-              private olManagerServer: OverlaymanagerService) { this.updateTrack() }
+              private olManagerServer: OverlaymanagerService,
+              private milsymService: MilsymService) { this.updateTrack() }
 
 
   updateTrack(): void {
     setInterval(() => {
       this.trackCount = this.tmManagerService.tracks.length;
       this.connected = this.wsService.connected;
+      this.filterEnabled = this.tmManagerService.getFilterEnabled();
     }, 1000);
   }
 
@@ -88,7 +91,7 @@ export class SidebarComponent {
     const dialogRef = this.dialog.open(FilterdialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
-      this.filterEnabled = false;
+      this.tmManagerService.setFilterEnabled(false);
       if (data != null) {
         this.filterManagerService.setSpeed(data.speedFilter);
         this.filterManagerService.setAlt(data.altFilter);
@@ -104,7 +107,7 @@ export class SidebarComponent {
         }
         
         this.olManagerServer.updateOverlays(data.olFilters);
-        this.checkOverlayFilter();
+        this.milsymService.trackOverlayFilter(this.tmManagerService.getFilterEnabled());
       }
         
     });
@@ -153,32 +156,7 @@ export class SidebarComponent {
     }
   }
 
-  checkOverlayFilter() {
-    for (let track of this.tmManagerService.tracks) {
-      this.viewerService.viewer.entities.getById(track.id).show = true;
-    }
 
-    for (let olFilter of this.olManagerServer.overlays) {
-      this.filterEnabled = this.filterEnabled || olFilter.checked;
-      if (this.filterEnabled) {
-        if (olFilter.checked) {
-          let ellipseCenter = this.viewerService.viewer.entities.getById(olFilter.id).position.getValue(this.viewerService.viewer.clock.currentTime);
-          for (let track of this.tmManagerService.tracks) {
-            let trackPosValue = this.viewerService.viewer.entities.getById(track.id).position.getValue(this.viewerService.viewer.clock.currentTime);
-            let distance = Cesium.Cartesian3.distance(ellipseCenter, trackPosValue);
-            if (distance > olFilter.radius) {
-              this.viewerService.viewer.entities.getById(track.id).show = false;
-            }
-          }
-        }
-      }
-      else {
-        for (let track of this.tmManagerService.tracks) {
-          this.viewerService.viewer.entities.getById(track.id).show = true;
-        }
-      }     
-    }
-  }
 
   createEllipse(data: any) {
     let ellipseCenter = Cesium.Cartesian3.fromDegrees(data.lon, data.lat);

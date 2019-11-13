@@ -27,10 +27,40 @@ export class WebsocketService {
     this.socket.emit('newMessage', "Client send message to server");
   }
 
-  onNewMessage() {
+  onStartupMessage() {
     return Observable.create(observer =>
     {
-      this.socket.on('newMessage', message =>
+      this.socket.on('startup', message =>
+      {
+        observer.next(message);
+      }); 
+    });
+  }
+
+  onCreateTrackMessage() {
+    return Observable.create(observer =>
+    {
+      this.socket.on('createTrack', message =>
+      {
+        observer.next(message);
+      }); 
+    });
+  }
+
+  onRemoveTrackMessage() {
+    return Observable.create(observer =>
+    {
+      this.socket.on('removeTrack', message =>
+      {
+        observer.next(message);
+      }); 
+    });
+  }
+
+  onUpdateTrackMessage() {
+    return Observable.create(observer =>
+    {
+      this.socket.on('updateTrack', message =>
       {
         observer.next(message);
       }); 
@@ -38,6 +68,7 @@ export class WebsocketService {
   }
 
   getURL(): string {
+    // return 'http://10.22.58.77:4567';
     return 'http://localhost:4567';
   }
 

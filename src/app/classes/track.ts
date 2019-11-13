@@ -1,5 +1,6 @@
 export class Track {
     public id: string;
+    public name: string;
     public type: string;
     public pos: string;
     public late: string;
