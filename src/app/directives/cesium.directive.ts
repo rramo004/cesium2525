@@ -1,12 +1,6 @@
 import { Directive, OnInit, ElementRef, Input } from '@angular/core';
-import { XmljsonserviceService } from '../services/xmljsonservice.service';
-import { MilsymService } from '../services/milsym.service';
-import { WebsocketService } from '../services/websocket.service';
 import { ViewerService } from '../services/viewer.service';
 import { TrackmanagerService } from '../services/trackmanager.service';
-import { ConditionalsService } from '../services/conditionalservice.service';
-import { Track } from '../classes/track';
-
 
 @Directive({
   selector: '[appCesium]'
@@ -14,12 +8,8 @@ import { Track } from '../classes/track';
 export class CesiumDirective implements OnInit {
 
   constructor(private el: ElementRef,
-    private xmljsonService: XmljsonserviceService,
-    private milsymService: MilsymService,
-    private wsService: WebsocketService,
     public viewerService: ViewerService,
-    public tmService: TrackmanagerService,
-    private conditionalServer: ConditionalsService) { }
+    public tmService: TrackmanagerService) { }
 
   ngOnInit() {
     if (this.viewerService.viewer == null) {
@@ -59,7 +49,9 @@ export class CesiumDirective implements OnInit {
         timeline: false,
         fullscreenButton: false,
         animation: false,
-        sceneMode: Cesium.SceneMode.SCENE2D
+        sceneMode: Cesium.SceneMode.SCENE2D,
+        requestRenderMode: true,
+        maximumRenderTimeChange: Infinity
       });
 
 
@@ -83,69 +75,11 @@ export class CesiumDirective implements OnInit {
         this.viewerService.viewer.imageryLayers.get(i).show = false;
       }
 
-
-
-
-      this.wsService.onStartupMessage().subscribe(response => {
-        //console.log(response);
-        if (response != null) {
-          this.milsymService.clearTracks();
-          this.tmService.clearTracks();
-
-          this.xmljsonService.parseJSON(response);
-          this.milsymService.plotTracks();
-          this.milsymService.trackOverlayFilter(this.tmService.getFilterEnabled());
-        }
-        else {
-          this.milsymService.clearTracks();
-          this.tmService.clearTracks();
-        }
-      });
-
-      this.wsService.onCreateTrackMessage().subscribe(response => {
-        //console.log(response);
-        if (response != null) {
-          let track: Track = this.xmljsonService.parseCreateTrackJSON(response);
-          this.tmService.pushTrack(track);
-          this.milsymService.plotTrack(track);
-          this.milsymService.trackOverlayFilter(this.tmService.getFilterEnabled());
-        }
-      });
-
-      this.wsService.onRemoveTrackMessage().subscribe(response => {
-        //console.log(response);
-        if (response != null) {
-          let id: string = this.xmljsonService.parseRemoveTrackJSON(response);
-          this.tmService.removeTrackById(id);
-          this.milsymService.removeTrack(id);
-          this.milsymService.trackOverlayFilter(this.tmService.getFilterEnabled());
-        }
-      });
-
-      this.wsService.onUpdateTrackMessage().subscribe(response => {
-        //console.log(response);
-        if (response != null) {
-          let track: Track = this.xmljsonService.parseCreateTrackJSON(response);
-          if (this.tmService.containsTrack(track)) {
-            this.tmService.pushTrack(track);
-            if (this.milsymService.containsTrack(track)) {
-              this.milsymService.modifyTrack(track);
-            }
-          }
-          else {
-            this.tmService.pushTrack(track);
-            this.milsymService.plotTrack(track);
-          }
-          this.milsymService.trackOverlayFilter(this.tmService.getFilterEnabled());
-        }
-      });
-
-
       var labelEntity = this.viewerService.viewer.entities.add({
         label: {
           show: false,
           showBackground: true,
-          font: '16px monospace',
+          font: '18px monospace',
           horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
           verticalOrigin: Cesium.VerticalOrigin.TOP,
           pixelOffset: new Cesium.Cartesian2(15, 0),

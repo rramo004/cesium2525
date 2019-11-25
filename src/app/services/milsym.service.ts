@@ -4,6 +4,7 @@ import * as ms from 'milsymbol';
 import { ViewerService } from './viewer.service';
 import { TrackmanagerService } from './trackmanager.service';
 import { OverlaymanagerService } from './overlaymanager.service';
+import { FiltermanagerService } from './filtermanager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,18 @@ export class MilsymService {
 
   constructor(private viewerService: ViewerService,
     private tmService: TrackmanagerService,
-    private olManagerServer: OverlaymanagerService) { }
+    private olManagerServer: OverlaymanagerService,
+    private fmService: FiltermanagerService) { }
 
   plotTrack(track: Track) {
+
     let sym = new ms.Symbol(
       track.type,
       {
-        size: 25,
-        infoColor: "#FFFFFF",
+        size: 30,
+        infoColor: track.color,
+        outlineColor: "#000000",
+        fill: false,
         outlineWidth: 2,
         quantity: track.name,
         staffComments: track.cse + '\u00B0',
@@ -45,7 +50,7 @@ export class MilsymService {
         billboard: {
           image: sym.asCanvas(), //Get the canvas for the billboard
           //pixelOffset : new Cesium.Cartesian2(-sym.markerAnchor.x, -sym.markerAnchor.y), // Symbol offset
-          eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
+          // eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
           horizontalOrigin: Cesium.HorizontalOrigin.LEFT, // default
           verticalOrigin: Cesium.VerticalOrigin.TOP,
         }
@@ -54,11 +59,14 @@ export class MilsymService {
 
   plotTracks() {
     for (let i = 0; i < this.tmService.tracks.length; i++) {
+
       let sym = new ms.Symbol(
         this.tmService.tracks[i].type,
         {
-          size: 25,
-          infoColor: "#FFFFFF",
+          size: 30,
+          infoColor: this.tmService.tracks[i].color,
+          outlineColor: "#000000",
+          fill: false,
           outlineWidth: 2,
           quantity: this.tmService.tracks[i].name,
           staffComments: this.tmService.tracks[i].cse + '\u00B0',
@@ -87,7 +95,7 @@ export class MilsymService {
           billboard: {
             image: sym.asCanvas(), //Get the canvas for the billboard
             //pixelOffset : new Cesium.Cartesian2(-sym.markerAnchor.x, -sym.markerAnchor.y), // Symbol offset
-            eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
+            // eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
             horizontalOrigin: Cesium.HorizontalOrigin.LEFT, // default
             verticalOrigin: Cesium.VerticalOrigin.TOP,
           }
@@ -97,11 +105,14 @@ export class MilsymService {
   }
 
   modifyTrack(track: Track) {
+
     let sym = new ms.Symbol(
       track.type,
       {
-        size: 25,
-        infoColor: "#FFFFFF",
+        size: 30,
+        infoColor: track.color,
+        outlineColor: "#000000",
+        fill: false,
         outlineWidth: 2,
         quantity: track.name,
         staffComments: track.cse + '\u00B0',
@@ -113,18 +124,18 @@ export class MilsymService {
     let lat: string = (track.lat).toString();
     let lon: string = (track.lon).toString();
     let desc: string =
-        'Track Id: ' + track.name +
-        '<br>Lat: ' + lat.slice(0, 5) + '\u00B0' +
-        '<br>Lon: ' + lon.slice(0, 6) + '\u00B0' +
-        '<br>Course: ' + track.cse + '\u00B0' +
-        '<br>Speed: ' + track.spd + 'KT';
+      'Track Id: ' + track.name +
+      '<br>Lat: ' + lat.slice(0, 5) + '\u00B0' +
+      '<br>Lon: ' + lon.slice(0, 6) + '\u00B0' +
+      '<br>Course: ' + track.cse + '\u00B0' +
+      '<br>Speed: ' + track.spd + 'KT';
     this.viewerService.viewer.entities.getById(track.id).name = track.name;
     this.viewerService.viewer.entities.getById(track.id).description = desc;
     this.viewerService.viewer.entities.getById(track.id).position = Cesium.Cartesian3.fromDegrees(track.lon, track.lat);
     this.viewerService.viewer.entities.getById(track.id).billboard = new Cesium.BillboardGraphics(
       {
         image: sym.asCanvas(), //Get the canvas for the billboard
-        eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
+        // eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
         horizontalOrigin: Cesium.HorizontalOrigin.LEFT, // default
         verticalOrigin: Cesium.VerticalOrigin.TOP,
       }

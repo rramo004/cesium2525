@@ -6,8 +6,6 @@ import { interval, throwError } from 'rxjs';
 import { TrackmanagerService } from './trackmanager.service';
 
 import { catchError, map, timeInterval, switchMap } from 'rxjs/operators';
-import { FiltermanagerService } from './filtermanager.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +25,7 @@ export class XmljsonserviceService {
   };
 
   constructor(private http: HttpClient,
-    private tmService: TrackmanagerService,
-    private fmService: FiltermanagerService) {
+    private tmService: TrackmanagerService) {
   }
 
   public get(url: string) {
@@ -45,8 +42,6 @@ export class XmljsonserviceService {
   }
 
   parseXML(response: string, tracks: Track[]) {
-    this.fmService.setSpeed(20);
-    this.fmService.setAlt(10000);
     parse.parseString(response, (err, results) => {
       let trkTopTag: any[] = results['tracks'];
       let trks: any[] = trkTopTag['track'];
@@ -84,8 +79,6 @@ export class XmljsonserviceService {
   }
 
   parseJSON(response: any) {
-    this.fmService.setSpeed(20);
-    this.fmService.setAlt(10000);
     let trackJSON: any[] = JSON.parse(response)['Tracks'];
     if (trackJSON != undefined) {
       for (let i = 0; i < trackJSON.length; i++) {
@@ -120,8 +113,6 @@ export class XmljsonserviceService {
   }
 
   parseCreateTrackJSON(response: any): Track {
-    this.fmService.setSpeed(20);
-    this.fmService.setAlt(10000);
     let trackJSON = JSON.parse(response);
 
     let track: Track = new Track();

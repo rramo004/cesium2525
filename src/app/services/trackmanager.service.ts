@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Track } from '../classes/track';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,13 +8,18 @@ import { Track } from '../classes/track';
 export class TrackmanagerService {
 
   tracks: Track[];
+  observableTrack: BehaviorSubject<Track[]>;
   private filterEnabled: boolean;
+  observableFilter: BehaviorSubject<boolean>;
 
   constructor() { 
     this.tracks = [];
+    this.observableTrack = new BehaviorSubject<Track[]>(this.tracks);
     this.filterEnabled = false;
+    this.observableFilter = new BehaviorSubject<boolean>(this.filterEnabled);
   }
 
+  /* Getters and Setters for track info */
   getTracks(): Track[] {
     return this.tracks;
   }
@@ -47,6 +53,8 @@ export class TrackmanagerService {
     return false;
   }
 
+
+  /* Adding and deleting to Track list*/
   pushTrack(track: Track) {
     if (this.containsTrack(track)) {
       let index = this.getTrackIndexById(track.id);
@@ -55,24 +63,40 @@ export class TrackmanagerService {
     else {
       this.tracks.push(track);
     }
+
+    this.eventTrackChange();
   }
 
   clearTracks() {
     this.tracks = [];
+    this.eventTrackChange();
   }
 
   removeTrackById(id: string) {
     let index = this.getTrackIndexById(id);
 
-    if (index != -1)
-      delete this.tracks[index];
+    if (index != -1) {
+      this.tracks.splice(index, 1);
+      this.eventTrackChange();
+    }
   }
 
+  /* Getter and Setter for Filter Enabled/Disable */
   getFilterEnabled(): boolean {
     return this.filterEnabled;
   }
 
   setFilterEnabled(enabled: boolean) {
     this.filterEnabled = enabled;
+    this.eventFilterChange();
+  }
+
+  eventFilterChange() {
+    this.observableFilter.next(this.filterEnabled);
+  }
+
+  /* Observable for track changes */
+  eventTrackChange() {
+    this.observableTrack.next(this.tracks);
   }
 }

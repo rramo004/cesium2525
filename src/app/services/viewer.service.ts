@@ -6,8 +6,11 @@ import { Injectable } from '@angular/core';
 export class ViewerService {
 
   private _viewer: any = null;
+  private _pointCollection: any = null;
 
-  constructor() { }
+  constructor() {
+    this._pointCollection = new Cesium.PointPrimitiveCollection;
+  }
 
   get viewer() {
     return this._viewer;
@@ -15,6 +18,10 @@ export class ViewerService {
 
   set viewer(viewer: any) {
     this._viewer = viewer;
+  }
+
+  get pointCollection() {
+    return this._pointCollection;
   }
 
 }

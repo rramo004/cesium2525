@@ -9,49 +9,55 @@ import { FiltermanagerService } from './filtermanager.service';
 })
 export class ConditionalsService {
 
+  tracks: Track[];
+
   constructor(private viewerService: ViewerService,
-              private tmService: TrackmanagerService,
-              private fmService: FiltermanagerService) {
-    this.getUpdate();
+    private tmService: TrackmanagerService,
+    private fmService: FiltermanagerService) {
+
+    this.tracks = this.tmService.getTracks();
+    this.fmService.setSpeed(20);
+    this.fmService.setAlt(10000);
+
+    this.tmService.observableTrack.subscribe(response => {
+      this.tracks = response;
+    });
+
+    // this.getUpdate()
   }
 
-  tracks: Track[];
   getUpdate() {
     setInterval(() => {
-      this.tracks = this.tmService.getTracks();
-      //this.checkCond();
-    }, 450);
+      // this.checkCond();
+    }, 600);
   }
 
+  // checkCond() {
+  //   for (let track of this.tracks) {
 
-  checkCond() {
-    for(let track of this.tracks) {
-      if (track.spd >= this.fmService.getSpeed() ) {
-        if (!track.spdAck) {
-          if (this.viewerService.viewer.entities.getById(track.id).show) {
-            this.viewerService.viewer.entities.getById(track.id).show = false;
-          }
-          else {
-            this.viewerService.viewer.entities.getById(track.id).show = true;
-          }
-        }
-      }
-      else if (track.alt >= this.fmService.getAlt() ) {
-        if (!track.altAck) {
-          if (this.viewerService.viewer.entities.getById(track.id).show) {
-            this.viewerService.viewer.entities.getById(track.id).show = false;
-          }
-          else {
-            this.viewerService.viewer.entities.getById(track.id).show = true;
-          }
-        }
-      }
-      else if (track.spdAck || track.altAck) {
-        this.viewerService.viewer.entities.getById(track.id).show = true;
-      }
-      else {
-        this.viewerService.viewer.entities.getById(track.id).show = true;
-      }
-    }
-  }
+  //     if (track.spd >= this.fmService.getSpeed()) {
+  //       if (!track.spdAck && this.viewerService.viewer.entities.getById(track.id) != null) {
+  //         if (this.viewerService.viewer.entities.getById(track.id).isShowing) {
+  //           this.viewerService.viewer.entities.getById(track.id).show = false;
+  //         }
+  //         else {
+  //           this.viewerService.viewer.entities.getById(track.id).show = true;
+  //         }
+  //       }
+  //     }
+  //     else if (track.alt >= this.fmService.getAlt()) {
+  //       if (!track.altAck) {
+  //         if (this.viewerService.viewer.entities.getById(track.id).isShowing) {
+  //           this.viewerService.viewer.entities.getById(track.id).show = false;
+  //         }
+  //         else {
+  //           this.viewerService.viewer.entities.getById(track.id).show = true;
+  //         }
+  //       }
+  //     }
+  //     else if (track.spdAck || track.altAck) {
+  //       this.viewerService.viewer.entities.getById(track.id).show = true;
+  //     }
+  //   }
+  // }
 }

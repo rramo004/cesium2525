@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { CesiumDirective } from './directives/cesium.directive';
 import { XmljsonserviceService } from './services/xmljsonservice.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatTableModule, MatIconModule, MatTooltipModule, MatSidenavModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatCheckboxModule } from '@angular/material';
+import { MatToolbarModule, MatTableModule, MatIconModule, MatTooltipModule, MatSidenavModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatCheckboxModule, MatPaginatorModule } from '@angular/material';
 import { CopComponent } from './components/cop/cop.component';
 import { TsComponent } from './components/ts/ts.component';
 import { MilsymService } from './services/milsym.service';
@@ -65,7 +65,8 @@ import { OverlaymanagerService } from './services/overlaymanager.service'
     ReactiveFormsModule,
     MatRadioModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule
   ],
   entryComponents: [
     OverlaydialogComponent,
