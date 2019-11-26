@@ -25,3 +25,12 @@ mat-paginator {
     background-color: #38404c;
     color: white;
 }
+
+.mat-form-field {
+    width: 100%;
+}
+
+.input {
+    background-color: #38404c;
+    color: white;
+}
